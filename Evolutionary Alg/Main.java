@@ -72,6 +72,8 @@ class EvolutionaryAlgorithm {
     private int[] weights; //holds the randomly generated weights for each item
     private int[] values; //holds the benefit (or reward) for each item
     private int capacity; //the maximum weight allowed in the knapsack
+
+    private List<Double> bestFitnessHistory;
     
     public EvolutionaryAlgorithm(int populationSize, int genotypeLength, double crossoverProbability, double mutationProbability, int generations) {
         // Initialize the evolutionary algorithm with the given parameters
@@ -81,6 +83,8 @@ class EvolutionaryAlgorithm {
         this.mutationProbability = mutationProbability;
         this.generations = generations;
         this.random = new Random();
+        bestFitnessHistory = new ArrayList<>();
+
         // Initialize items: assign values 1, 2, 3, ... and random weights between 1 and 10.
         values = new int[genotypeLength];
         weights = new int[genotypeLength];
@@ -146,7 +150,7 @@ class EvolutionaryAlgorithm {
                 if (totalWeight <= capacity) {
                     individual.setFitness(totalValue);
                 } else {
-                    individual.setFitness(totalValue * ((double) capacity / totalWeight));
+                    individual.setFitness(totalValue * ((double) capacity / totalWeight*10));
                 }
             }    
         }
@@ -208,11 +212,11 @@ class EvolutionaryAlgorithm {
                 totalWeight += weights[i];
             }
         }
-        System.out.println("Generation " + generation + " Best Fitness = " + best.getFitness());
-        System.out.println("Best genotype: " + genotypeStr.toString());
-        System.out.println("Total Value: " + totalValue);
-        System.out.println("Total Weight: " + totalWeight + (totalWeight <= capacity ? " (Feasible)" : " (Infeasible)"));
-        System.out.println("------------------------------");
+        // System.out.println("Generation " + generation + " Best Fitness = " + best.getFitness());
+        // System.out.println("Best genotype: " + genotypeStr.toString());
+        // System.out.println("Total Value: " + totalValue);
+        // System.out.println("Total Weight: " + totalWeight + (totalWeight <= capacity ? " (Feasible)" : " (Infeasible)"));
+        // System.out.println("------------------------------");
     }
 
     public void loop() {
@@ -221,11 +225,14 @@ class EvolutionaryAlgorithm {
 
             // Sort population by fitness in descending order
             population.sort((a, b) -> Double.compare(b.getFitness(), a.getFitness()));
+
+            bestFitnessHistory.add(population.get(0).getFitness());
+
             // Print the best fitness in the current generation
-            if (generation == 0) 
-                System.out.println("Generation Zero (Probably Random Init): Best Fitness = " + population.get(0).getFitness());
-            else 
-                System.out.println("Generation " + (generation) + ": Best Fitness = " + population.get(0).getFitness());
+            // if (generation == 0) 
+            //     System.out.println("Generation Zero (Probably Random Init): Best Fitness = " + population.get(0).getFitness());
+            // else 
+            //     System.out.println("Generation " + (generation) + ": Best Fitness = " + population.get(0).getFitness());
 
 
             // Generate breeding pool
@@ -276,17 +283,46 @@ class EvolutionaryAlgorithm {
        // System.out.println("Final Generation, i.e. " + (generations) + ": Best Fitness = " + population.get(0).getFitness());
        printBestIndividualInfo(generations);
     }
+
+    // Public getter for the final population (useful for testing/reporting)
+    public List<Individual> getPopulation() {
+        return population;
+    }
+    
+    // Public getter for the best individual in the current population.
+    public Individual getBestIndividual() {
+        evaluateFitness();
+        population.sort((a, b) -> Double.compare(b.getFitness(), a.getFitness()));
+        return population.get(0);
+    }
+
+    public double getValues(int i) {
+        return values[i];
+    }
+
+    public double getWeights(int i) {
+        return weights[i];
+    }
+
+    public double getCapacity() {
+        return capacity;
+    }
+
+    // Public getter for the fitness history (for plotting purposes).
+    public List<Double> getFitnessHistory() {
+        return bestFitnessHistory;
+    }
 }
 
 public class Main {
     public static void main(String[] args) {
         // Initialize the evolutionary algorithm
         EvolutionaryAlgorithm ea = new EvolutionaryAlgorithm(
-                1000,         // Population size
+                10,         // Population size
                 10,          // Genotype length
                 0.8,    // Crossover probability
-                0.1,        // Mutation probability
-                300          // Number of generations
+                0.5,        // Mutation probability
+                50         // Number of generations
         );
 
         // Run the evolution (implement fitness evaluation and selection to make this functional)
