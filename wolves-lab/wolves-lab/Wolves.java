@@ -1,5 +1,5 @@
-import javax.swing.*;
 import java.util.*;
+import javax.swing.*;
 
 public class Wolves {
 
@@ -71,15 +71,15 @@ public class Wolves {
 
     private void initWolves() {
         // You should put your own wolves in the array here!!
-        Wolf[] wolvesPool = new Wolf[5];
-        // wolvesPool[0] = new CooperativeWolf();
-        // wolvesPool[1] = new CooperativeWolf();
-        // wolvesPool[2] = new CooperativeWolf();
-        // wolvesPool[3] = new CooperativeWolf();
-        // wolvesPool[4] = new CooperativeWolf();
-        for (int i = 0; i < 5; i++) {
-            wolvesPool[i] = new LockedTargetWolf();
+        int number = 5;
+        Wolf[] wolvesPool = new Wolf[number];
+        for (int i = 0; i < number; i++) {
+            wolvesPool[i] = new ImprovedPackWolfNoFreeze(); 
         }
+        // wolvesPool[0] = new ImprovedPackWolfNoFreeze();
+        // wolvesPool[1] = new RandomWolf();
+        // wolvesPool[2] = new RandomWolf();
+
 
         // Below code will select three random wolves from the pool.
         // Make the pool as large as you want, but not < numWolves
@@ -288,17 +288,5 @@ public class Wolves {
         Collections.shuffle(preys);
         return preys;
     }
-
-    public int[] getWolfRows() {
-        return wolfRow;
-    }
-    
-    public int[] getWolfCols() {
-        return wolfCol;
-    }
-    
-    public int getVisibility() {
-        return visibility;
-    }    
 
 }

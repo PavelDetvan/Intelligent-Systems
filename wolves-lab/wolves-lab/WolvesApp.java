@@ -3,7 +3,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
@@ -29,7 +28,7 @@ public class WolvesApp extends JFrame {
 		setLocation(left, top);
 
 		//Wolves(numbrows, numbcols, numbWolves, numbPrey, visibilityRangePrey, minCapturedToEndGame(leave at 1), numberOfWolvesNeededToCaptureAPrey)
-		game = new Wolves(numbrows, numbcols,5,10,10,2, 2);
+		game = new Wolves(numbrows, numbcols,5,10,5,1, 3);
 		
 		WolvesUI panel = new WolvesUI(game,squaresize);
 		add(panel, BorderLayout.CENTER);
