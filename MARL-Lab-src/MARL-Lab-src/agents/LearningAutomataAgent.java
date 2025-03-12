@@ -23,6 +23,9 @@ public class LearningAutomataAgent implements Agent {
         alpha = 0.1;
         beta = 0.1;
         // Set a reward threshold (adjust according to your game payoffs)
+        // Prisoners dilemma: -3
+        // Matching pennies: 0
+        // Battle of sexes: 1
         threshold = 1;
     }
 

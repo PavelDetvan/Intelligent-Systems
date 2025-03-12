@@ -1,6 +1,6 @@
-import marlviz.*;
 import agents.*;
 import games.*;
+import marlviz.*;
 
 public class Main {
 
@@ -17,8 +17,8 @@ public class Main {
 		
 		int cnt = 0;
 		for (int i=0; i<5; i++) {
-			Agent agent1 = new LearningAutomataAgent(2);
-			Agent agent2 = new LearningAutomataAgent(2);
+			Agent agent1 = new WoLFAgent(2);
+			Agent agent2 = new WoLFAgent(2);
 			while (cnt < 5000) {
 				int a1 = agent1.selectAction();
 				int a2 = agent2.selectAction();
