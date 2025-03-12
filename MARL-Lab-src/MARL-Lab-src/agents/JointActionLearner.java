@@ -21,15 +21,15 @@ public class JointActionLearner implements Agent {
                 Q[a][b] = -0.1 + Math.random() * 0.2;
             }
         }
-        alpha = 0.01;   // You can experiment with this value
-        tau = 0.2;      // Initial temperature for exploration
+        alpha = 0.01;
+        tau = 0.2;
     }
 
     // Helper: Estimate opponent's action probabilities based on past observations.
     private double[] getOpponentProbabilities() {
         double[] p = new double[numberOfActions];
         if (oppTotal == 0) {
-            // No data yet: assume uniform distribution
+            // No data yet => assume uniform distribution
             for (int i = 0; i < numberOfActions; i++) {
                 p[i] = 1.0 / numberOfActions;
             }
@@ -41,7 +41,7 @@ public class JointActionLearner implements Agent {
         return p;
     }
 
-    // Helper: Compute the expected Q-value for each of the agent's actions.
+    // Helper: Compute expected Q-value for each of agent's actions.
     // For each own action, E[Q(a)] = sum_over_opponent( p(opponent)*Q[a][opponent] ).
     private double[] getExpectedQ() {
         double[] expected = new double[numberOfActions];
@@ -56,7 +56,7 @@ public class JointActionLearner implements Agent {
         return expected;
     }
 
-    // Helper: Compute a softmax probability distribution from expected Q-values.
+    // Helper: Compute softmax probability distribution from expected Q-values.
     private double[] softmax(double[] expected) {
         double sumExp = 0.0;
         double[] expValues = new double[numberOfActions];
@@ -71,7 +71,7 @@ public class JointActionLearner implements Agent {
         return probs;
     }
 
-    // Returns the probability of selecting action i (for visualization).
+    // Returns probability of selecting action i (for visualization).
     @Override
     public double actionProb(int i) {
         double[] expected = getExpectedQ();
@@ -79,7 +79,7 @@ public class JointActionLearner implements Agent {
         return probs[i];
     }
 
-    // Select an action according to the Boltzmann (softmax) probability distribution.
+    // Select an action = Boltzmann (softmax) probability distribution.
     @Override
     public int selectAction() {
         double[] expected = getExpectedQ();
@@ -95,17 +95,17 @@ public class JointActionLearner implements Agent {
         return numberOfActions - 1; // Fallback in case of rounding error
     }
 
-    // Update the joint Q-table using the observed joint action (own and opponent) and the received reward.
+    // Update the joint Q-table with observed joint action (own and opponent) and received reward.
     @Override
     public void update(int own, int other, double reward) {
-        // Standard Q-learning update for joint action (own, other)
+        // Q-learning update for joint action (own, other)
         Q[own][other] = Q[own][other] + alpha * (reward - Q[own][other]);
-        // Update opponent action counts for estimating opponent's behavior.
+        // Update opponent action counts for estimating opponent's behavior
         oppCount[other]++;
         oppTotal++;
     }
 
-    // For visualization, return the expected Q-value for action i.
+    // Return the expected Q-value for action i (for visualization).
     @Override
     public double getQ(int i) {
         double[] expected = getExpectedQ();

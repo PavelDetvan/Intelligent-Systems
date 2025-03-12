@@ -14,12 +14,12 @@ public class QLearnerBoltzmann implements Agent {
             // Initialize Q-values to small random numbers near zero
             Q[i] = -0.1 + Math.random() * 0.2;
         }
-        alpha = 0.01;       // You can adjust this value
-        alphadecay = 1.0;   // No decay by default, or set a value < 1 for decay
-        tau = 0.2;          // Initial temperature for exploration
+        alpha = 0.01;       // Learning rate
+        alphadecay = 1.0;   // Decay factor for learning rate
+        tau = 0.2;          // Temperature parameter for exploration 
     }
     
-    // Helper method: Compute the sum of exponentials for normalization
+    // Helper: Compute the sum of exponentials for normalization
     private double computeNormalization() {
         double sum = 0.0;
         for (double q : Q) {
@@ -36,13 +36,13 @@ public class QLearnerBoltzmann implements Agent {
 
     @Override
     public int selectAction() {
-        // Compute the probabilities for all actions
+        // Compute probabilities for all actions
         double norm = computeNormalization();
         double[] probs = new double[Q.length];
         for (int i = 0; i < Q.length; i++) {
             probs[i] = Math.exp(Q[i] / tau) / norm;
         }
-        // Sample an action based on the probabilities
+        // Sample action based on probabilities
         double rand = Math.random();
         double cumulative = 0.0;
         for (int i = 0; i < probs.length; i++) {
@@ -57,9 +57,7 @@ public class QLearnerBoltzmann implements Agent {
 
     @Override
     public void update(int own, int other, double reward) {
-        // Since the game is stateless, we ignore 'other' and update only based on our reward
         Q[own] = Q[own] + alpha * (reward - Q[own]);
-        // Optionally, decay the learning rate if needed:
         alpha *= alphadecay;
     }
 
